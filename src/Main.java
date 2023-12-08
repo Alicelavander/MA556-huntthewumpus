@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -58,8 +59,10 @@ public class Main {
                 if(arrowAmount == 0) System.out.println("You ran out of arrows :(");
                 else {
                     arrowAmount--;
-                    if(target == locations[1]) {
-                        System.out.println("You killed the wumpus");
+                    System.out.println("target: " + Arrays.toString(target));
+                    System.out.println("wumpus: " + Arrays.toString(locations[1]));
+                    if(Arrays.equals(target, locations[1])) {
+                        System.out.println("You killed the wumpus, you win");
                         gameEnd = true;
                     } else {
                         System.out.println("The wumpus ran away!");
@@ -67,13 +70,13 @@ public class Main {
                     }
                 }
             } else {
-                if (target == locations[2]) {
+                if (Arrays.equals(target, locations[2])) {
                     System.out.println("Found an arrow...perhaps dropped by another, unsuccessful hunter.");
                     arrowAmount++;
-                } else if (target == locations[3]){
+                } else if (Arrays.equals(target, locations[3])){
                     System.out.println("The bats took you to a random place...");
                     target = randomCoordinates();
-                } else if (target == locations[1]) {
+                } else if (Arrays.equals(target, locations[1])) {
                     if(probability(0.7)){
                         System.out.println("You were killed by the wumpus...");
                         gameEnd = true;
@@ -81,7 +84,7 @@ public class Main {
                         System.out.println("The wumpus saw you and escaped to an adjacent cave...");
                         moveToAdjacentCave(locations[1]);
                     }
-                } else if (target == locations[4]){
+                } else if (Arrays.equals(target, locations[4])){
                     System.out.println("You falled into a bottomless pit!!");
                     gameEnd = true;
                 }
