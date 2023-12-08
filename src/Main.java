@@ -106,7 +106,7 @@ public class Main {
     }
 
     public static boolean probability(double threshold){
-        return Math.random() > threshold;
+        return Math.random() < threshold;
     }
 
     public static int[] randomCoordinates() {
