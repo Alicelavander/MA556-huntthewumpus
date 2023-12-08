@@ -1,33 +1,32 @@
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
         boolean gameEnd = false;
         int[] wumpus = new int[2];
-        int[] bat = new int[2];
-        int[] pit = new int[2];
         int[] player = new int[2];
-        int[] arrow = new int[2];
+
         int[][] locations = new int[5][2];
 
-        locations[0] = wumpus;
-        locations[1] = bat;
-        locations[2] = pit;
-        locations[3] = player;
-        locations[4] = arrow;
+        for (int i = 0; i < locations.length; i++) { // sets locations of each object in the game
+            locations[i] = randomCoordinates();
+            int newXCoords = locations[i][0];
+            int newYCoords = locations[i][1];
+            System.out.println("new location" + Arrays.toString(locations[i]));
 
-        
-        /*
-         * TODO: use while loop & randomCoordinates() to place all 5 object in different
-         * places
-         */
-
-        wumpus = randomCoordinates();
-        bat = randomCoordinates();
-        pit = randomCoordinates();
-        player = randomCoordinates();
-        arrow = randomCoordinates();
+            for (int l = 0; l < i; l++) { // check to ensure no repeats of locations
+                int oldXCoords = locations[l][0]; // already initialized x locations of the game objects
+                int oldYCoords = locations[l][1]; // already initialized y locations of the game objects
+                System.out.println("old locations" + Arrays.toString(locations[l]));
+                if (newXCoords == oldXCoords && newYCoords == oldYCoords) {
+                    i--;
+                    break;
+                }
+            }
+            System.out.println("\n");
+        }
 
         int arrowAmount = 5;
         int roomNumber;
@@ -61,7 +60,8 @@ public class Main {
             }
 
             if (command == 's') {
-                if(target == wumpus) gameEnd = true;
+                if (target == wumpus)
+                    gameEnd = true;
 
             } else {
 
