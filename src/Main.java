@@ -9,6 +9,7 @@ public class Main {
         TODO: use while loop & randomCoordinates() to place all 5 object in different places
          */
         player = randomCoordinates();
+        wumpus = randomCoordinates();
 
         int arrowAmount = 5;
         int roomNumber;
@@ -33,7 +34,20 @@ public class Main {
                 direction = s.nextLine().toCharArray()[0];
             }
 
+            int[] target = player;
+            switch (direction) {
+                case 'n' -> target[1]--;
+                case 'e' -> target[0]++;
+                case 's' -> target[1]++;
+                case 'w' -> target[0]--;
+            }
 
+            if (command == 's') {
+                if(target == wumpus) gameEnd = true;
+
+            } else {
+
+            }
         }
     }
 
