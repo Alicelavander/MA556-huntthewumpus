@@ -17,7 +17,7 @@ public class Main {
             roomNumber = 5 * player[1] + player[0] + 1;
             System.out.println("You are in Room" + roomNumber);
             /*
-            TODO: check adjacent places and show the hint
+            TODO: check adjacent places and show the hint :)
              */
             System.out.print("Shoot or move (s/m)? ");
             String command = s.nextLine();
