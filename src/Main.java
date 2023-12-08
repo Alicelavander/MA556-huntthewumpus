@@ -17,6 +17,7 @@ public class Main {
         locations[3] = player;
         locations[4] = arrow;
 
+        
         /*
          * TODO: use while loop & randomCoordinates() to place all 5 object in different
          * places
