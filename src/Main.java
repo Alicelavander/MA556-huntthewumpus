@@ -7,24 +7,7 @@ public class Main {
         boolean gameEnd = false;
         //0: player, 1: wumpus, 2: arrow, 3: bat, 4: pit
         int[][] locations = new int[5][2];
-
-        for (int i = 0; i < locations.length; i++) { // sets locations of each object in the game
-            locations[i] = randomCoordinates();
-            int newXCoords = locations[i][0];
-            int newYCoords = locations[i][1];
-            System.out.println("new location" + Arrays.toString(locations[i]));
-
-            for (int l = 0; l < i; l++) { // check to ensure no repeats of locations
-                int oldXCoords = locations[l][0]; // already initialized x locations of the game objects
-                int oldYCoords = locations[l][1]; // already initialized y locations of the game objects
-                System.out.println("old locations" + Arrays.toString(locations[l]));
-                if (newXCoords == oldXCoords && newYCoords == oldYCoords) {
-                    i--;
-                    break;
-                }
-            }
-            System.out.println("\n");
-        }
+        locations = getLocations(locations);
 
         int arrowAmount = 5;
         int roomNumber;
@@ -106,5 +89,25 @@ public class Main {
         int x = (int) (Math.random() * 5);
         int y = (int) (Math.random() * 5);
         return new int[] { x, y };
+    }
+
+    public static int[][] getLocations(int[][] locations) {
+        for (int i = 0; i < locations.length; i++) { // sets locations of each object in the game
+            locations[i] = randomCoordinates();
+            int newXCoords = locations[i][0];
+            int newYCoords = locations[i][1];
+
+            for (int l = 0; l < i; l++) { // check to ensure no repeats of locations
+                int oldXCoords = locations[l][0]; // already initialized x locations of the game objects
+                int oldYCoords = locations[l][1]; // already initialized y locations of the game objects
+                if (newXCoords == oldXCoords && newYCoords == oldYCoords) {
+                    i--;
+                    break;
+                }
+            }
+            System.out.println("\n");
+        }
+        // for(int i = 0;)
+        return locations;
     }
 }
