@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
@@ -41,11 +40,15 @@ public class Main {
             }
 
             if (command == 's') {
-                if(target == locations[1]) {
-                    System.out.println("You killed the wumpus");
-                    gameEnd = true;
-                } else {
-                    moveToAdjacentCave(locations[1]);
+                if(arrowAmount == 0) System.out.println("You ran out of arrows :(");
+                else {
+                    arrowAmount--;
+                    if(target == locations[1]) {
+                        System.out.println("You killed the wumpus");
+                        gameEnd = true;
+                    } else {
+                        moveToAdjacentCave(locations[1]);
+                    }
                 }
             } else {
                 if (target == locations[2]) {
