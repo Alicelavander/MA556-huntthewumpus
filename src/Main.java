@@ -20,18 +20,20 @@ public class Main {
             TODO: check adjacent places and show the hint
              */
             System.out.print("Shoot or move (s/m)? ");
-            String command = s.nextLine();
-            while(!command.equals("s") && !command.equals("m")){
+            char command = s.nextLine().toCharArray()[0];
+            while(command != 's' && command != 'm'){
                 System.out.print("Shoot or move (s/m)? ");
-                command = s.nextLine();
+                command = s.nextLine().toCharArray()[0];
             }
 
             System.out.print("Choose direction (n/e/s/w): ");
-            String direction = s.nextLine();
-            while(!direction.equals("n") && !direction.equals("e") && !direction.equals("s") && !direction.equals("w")){
+            char direction = s.nextLine().toCharArray()[0];
+            while(direction != 'n' && direction != 'e' && direction != 's' && direction != 'w'){
                 System.out.print("Choose direction (n/e/s/w): ");
-                direction = s.nextLine();
+                direction = s.nextLine().toCharArray()[0];
             }
+
+
         }
     }
 
