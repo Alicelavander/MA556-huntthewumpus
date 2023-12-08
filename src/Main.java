@@ -14,9 +14,17 @@ public class Main {
         while (!gameEnd) {
             roomNumber = 5 * locations[0][1] + locations[0][0] + 1;
             System.out.println("You are in Room" + roomNumber);
-            /*
-             * TODO: check adjacent places and show the hint
-             */
+
+            if (adjacentToPlayer(locations[1], locations[0])){
+                System.out.println("I smell a Wumpus nearby.");
+            }
+            if (adjacentToPlayer(locations[3], locations[0])){
+                System.out.println("I hear flapping nearby.");
+            }
+            if (adjacentToPlayer(locations[4], locations[0])){
+                System.out.println("I feel a breeze nearby.");
+            }
+
             System.out.print("Shoot or move (s/m)? ");
             char command = s.nextLine().toCharArray()[0];
             while (command != 's' && command != 'm') {
@@ -33,10 +41,10 @@ public class Main {
 
             int[] target = locations[0];
             switch (direction) {
-                case 'n' -> target[1]--;
-                case 'e' -> target[0]++;
-                case 's' -> target[1]++;
-                case 'w' -> target[0]--;
+                case 'n' -> target[1] = (target[1] - 1) % 5;
+                case 'e' -> target[0] = (target[0] + 1) % 5;
+                case 's' -> target[1] = (target[1] + 1) % 5;
+                case 'w' -> target[0] = (target[0] - 1) % 5;
             }
 
             if (command == 's') {
@@ -72,6 +80,11 @@ public class Main {
                 locations[0] = target;
             }
         }
+    }
+
+    public static boolean adjacentToPlayer(int[] target, int[] player){
+        return Math.abs(player[0] - target[0]) <= 1 && Math.abs(player[1] - target[1]) <= 1;
+
     }
 
     public static void moveToAdjacentCave(int[] object) {
