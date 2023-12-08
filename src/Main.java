@@ -14,7 +14,7 @@ public class Main {
 
         while (!gameEnd) {
             roomNumber = 5 * locations[0][1] + locations[0][0] + 1;
-            System.out.println("You are in Room" + roomNumber);
+            System.out.println("You are in Room " + roomNumber);
 
             if (adjacentToPlayer(locations[1], locations[0])){
                 System.out.println("I smell a Wumpus nearby.");
@@ -56,6 +56,7 @@ public class Main {
                         System.out.println("You killed the wumpus");
                         gameEnd = true;
                     } else {
+                        System.out.println("The wumpus ran away!");
                         moveToAdjacentCave(locations[1]);
                     }
                 }
