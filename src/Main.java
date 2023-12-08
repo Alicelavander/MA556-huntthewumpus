@@ -1,39 +1,36 @@
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
         boolean gameEnd = false;
-        int[] wumpus = new int[2];
-        int[] bat = new int[2];
-        int[] pit = new int[2];
-        int[] player = new int[2];
-        int[] arrow = new int[2];
+        //0: player, 1: wumpus, 2: arrow, 3: bat, 4: pit
         int[][] locations = new int[5][2];
 
-        locations[0] = wumpus;
-        locations[1] = bat;
-        locations[2] = pit;
-        locations[3] = player;
-        locations[4] = arrow;
+        for (int i = 0; i < locations.length; i++) { // sets locations of each object in the game
+            locations[i] = randomCoordinates();
+            int newXCoords = locations[i][0];
+            int newYCoords = locations[i][1];
+            System.out.println("new location" + Arrays.toString(locations[i]));
 
-        
-        /*
-         * TODO: use while loop & randomCoordinates() to place all 5 object in different
-         * places
-         */
-
-        wumpus = randomCoordinates();
-        bat = randomCoordinates();
-        pit = randomCoordinates();
-        player = randomCoordinates();
-        arrow = randomCoordinates();
+            for (int l = 0; l < i; l++) { // check to ensure no repeats of locations
+                int oldXCoords = locations[l][0]; // already initialized x locations of the game objects
+                int oldYCoords = locations[l][1]; // already initialized y locations of the game objects
+                System.out.println("old locations" + Arrays.toString(locations[l]));
+                if (newXCoords == oldXCoords && newYCoords == oldYCoords) {
+                    i--;
+                    break;
+                }
+            }
+            System.out.println("\n");
+        }
 
         int arrowAmount = 5;
         int roomNumber;
 
         while (!gameEnd) {
-            roomNumber = 5 * player[1] + player[0] + 1;
+            roomNumber = 5 * locations[0][1] + locations[0][0] + 1;
             System.out.println("You are in Room" + roomNumber);
             /*
              * TODO: check adjacent places and show the hint
@@ -52,7 +49,7 @@ public class Main {
                 direction = s.nextLine().toCharArray()[0];
             }
 
-            int[] target = player;
+            int[] target = locations[0];
             switch (direction) {
                 case 'n' -> target[1]--;
                 case 'e' -> target[0]++;
@@ -61,32 +58,32 @@ public class Main {
             }
 
             if (command == 's') {
-                if(target == wumpus) {
+                if(target == locations[1]) {
                     System.out.println("You killed the wumpus");
                     gameEnd = true;
                 } else {
-                    moveToAdjacentCave(wumpus);
+                    moveToAdjacentCave(locations[1]);
                 }
             } else {
-                if (target == arrow) {
+                if (target == locations[2]) {
                     System.out.println("Found an arrow...perhaps dropped by another, unsuccessful hunter.");
                     arrowAmount++;
-                } else if (target == bat){
+                } else if (target == locations[3]){
                     System.out.println("The bats took you to a random place...");
                     target = randomCoordinates();
-                } else if (target == wumpus) {
+                } else if (target == locations[1]) {
                     if(probability(0.7)){
                         System.out.println("You were killed by the wumpus...");
                         gameEnd = true;
                     } else {
                         System.out.println("The wumpus saw you and escaped to an adjacent cave...");
-                        moveToAdjacentCave(wumpus);
+                        moveToAdjacentCave(locations[1]);
                     }
-                } else if (target == pit){
+                } else if (target == locations[4]){
                     System.out.println("You falled into a bottomless pit!!");
                     gameEnd = true;
                 }
-                player = target;
+                locations[0] = target;
             }
         }
     }
