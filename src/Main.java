@@ -61,12 +61,48 @@ public class Main {
             }
 
             if (command == 's') {
-                if(target == wumpus) gameEnd = true;
-
+                if(target == wumpus) {
+                    System.out.println("You killed the wumpus");
+                    gameEnd = true;
+                } else {
+                    moveToAdjacentCave(wumpus);
+                }
             } else {
-
+                if (target == arrow) {
+                    System.out.println("Found an arrow...perhaps dropped by another, unsuccessful hunter.");
+                    arrowAmount++;
+                } else if (target == bat){
+                    System.out.println("The bats took you to a random place...");
+                    target = randomCoordinates();
+                } else if (target == wumpus) {
+                    if(probability(0.7)){
+                        System.out.println("You were killed by the wumpus...");
+                        gameEnd = true;
+                    } else {
+                        System.out.println("The wumpus saw you and escaped to an adjacent cave...");
+                        moveToAdjacentCave(wumpus);
+                    }
+                } else if (target == pit){
+                    System.out.println("You falled into a bottomless pit!!");
+                    gameEnd = true;
+                }
+                player = target;
             }
         }
+    }
+
+    public static void moveToAdjacentCave(int[] object) {
+        if(probability(0.5)){
+            if(probability(0.5)) object[0]++;
+            else object[0]--;
+        } else {
+            if(probability(0.5)) object[1]++;
+            else object[1]--;
+        }
+    }
+
+    public static boolean probability(double threshold){
+        return Math.random() > threshold;
     }
 
     public static int[] randomCoordinates() {
