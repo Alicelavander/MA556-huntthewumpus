@@ -13,6 +13,12 @@ public class Main {
         int roomNumber;
 
         while (!gameEnd) {
+            System.out.println("Player: " + Arrays.toString(locations[0]));
+            System.out.println("Wumpus: " + Arrays.toString(locations[1]));
+            System.out.println("Arrow: " + Arrays.toString(locations[2]));
+            System.out.println("Bat: " + Arrays.toString(locations[3]));
+            System.out.println("Pit: " + Arrays.toString(locations[4]));
+
             roomNumber = 5 * locations[0][1] + locations[0][0] + 1;
             System.out.println("You are in Room " + roomNumber);
 
@@ -42,10 +48,10 @@ public class Main {
 
             int[] target = locations[0];
             switch (direction) {
-                case 'n' -> target[1] = (target[1] - 1) % 5;
-                case 'e' -> target[0] = (target[0] + 1) % 5;
-                case 's' -> target[1] = (target[1] + 1) % 5;
-                case 'w' -> target[0] = (target[0] - 1) % 5;
+                case 'n' -> target[1] = (target[1] - 1 + 5) % 5;
+                case 'e' -> target[0] = (target[0] + 1 + 5) % 5;
+                case 's' -> target[1] = (target[1] + 1 + 5) % 5;
+                case 'w' -> target[0] = (target[0] - 1 + 5) % 5;
             }
 
             if (command == 's') {
@@ -91,11 +97,11 @@ public class Main {
 
     public static void moveToAdjacentCave(int[] object) {
         if(probability(0.5)){
-            if(probability(0.5)) object[0]++;
-            else object[0]--;
+            if(probability(0.5)) object[0] = (object[0] + 1 + 5) % 5;
+            else object[0] = (object[0] - 1 + 5) % 5;;
         } else {
-            if(probability(0.5)) object[1]++;
-            else object[1]--;
+            if(probability(0.5)) object[1] = (object[1] + 1 + 5) % 5;
+            else object[1] = (object[1] - 1 + 5) % 5;
         }
     }
 
@@ -124,9 +130,6 @@ public class Main {
                 }
             }
             System.out.println("\n");
-        }
-        for (int i = 0; i < 5; i++) {
-            System.out.println(Arrays.toString(locations[i]));
         }
         return locations;
     }
