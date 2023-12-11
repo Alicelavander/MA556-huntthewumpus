@@ -66,7 +66,7 @@ public class Main {
                         gameEnd = true;
                     } else {
                         System.out.println("The wumpus ran away!");
-                        moveToAdjacentCave(locations[1]);
+                        moveToAdjacentCave(locations[1], locations[0]);
                     }
                 }
             } else {
@@ -82,7 +82,7 @@ public class Main {
                         gameEnd = true;
                     } else {
                         System.out.println("The wumpus saw you and escaped to an adjacent cave...");
-                        moveToAdjacentCave(locations[1]);
+                        moveToAdjacentCave(locations[1], locations[0]);
                     }
                 } else if (Arrays.equals(target, locations[4])){
                     System.out.println("You falled into a bottomless pit!!");
@@ -95,16 +95,19 @@ public class Main {
 
     public static boolean adjacentToPlayer(int[] target, int[] player){
         return Math.abs(player[0] - target[0]) <= 1 && Math.abs(player[1] - target[1]) <= 1;
-
     }
 
-    public static void moveToAdjacentCave(int[] object) {
-        if(probability(0.5)){
-            if(probability(0.5)) object[0] = (object[0] + 1 + 5) % 5;
-            else object[0] = (object[0] - 1 + 5) % 5;;
-        } else {
-            if(probability(0.5)) object[1] = (object[1] + 1 + 5) % 5;
-            else object[1] = (object[1] - 1 + 5) % 5;
+    public static void moveToAdjacentCave(int[] object, int[] avoid) {
+        boolean valid = false;
+        while(!valid){
+            if(probability(0.5)){
+                if(probability(0.5)) object[0] = (object[0] + 1 + 5) % 5;
+                else object[0] = (object[0] - 1 + 5) % 5;;
+            } else {
+                if(probability(0.5)) object[1] = (object[1] + 1 + 5) % 5;
+                else object[1] = (object[1] - 1 + 5) % 5;
+            }
+            if(!Arrays.equals(object, avoid)) valid = true;
         }
     }
 
@@ -132,7 +135,6 @@ public class Main {
                     break;
                 }
             }
-            System.out.println("\n");
         }
         return locations;
     }
