@@ -21,13 +21,13 @@ public class Main {
             roomNumber = 5 * locations[0][1] + locations[0][0] + 1;
             System.out.println("You are in Room " + roomNumber);
 
-            if (adjacentToPlayer(locations[1], locations[0])){
+            if (isAdjacentToPlayer(locations[1], locations[0])){
                 System.out.println("I smell a Wumpus nearby.");
             }
-            if (adjacentToPlayer(locations[3], locations[0])){
+            if (isAdjacentToPlayer(locations[3], locations[0])){
                 System.out.println("I hear flapping nearby.");
             }
-            if (adjacentToPlayer(locations[4], locations[0])){
+            if (isAdjacentToPlayer(locations[4], locations[0])){
                 System.out.println("I feel a breeze nearby.");
             }
 
@@ -54,6 +54,7 @@ public class Main {
             }
 
             if (command == 's') {
+                //shoot an arrow to target position
                 if(arrowAmount == 0) System.out.println("You ran out of arrows :(");
                 else {
                     arrowAmount--;
@@ -68,10 +69,9 @@ public class Main {
                     }
                 }
             } else {
-                if (Arrays.equals(target, locations[2])) {
-                    System.out.println("Found an arrow...perhaps dropped by another, unsuccessful hunter.");
-                    arrowAmount++;
-                } else if (Arrays.equals(target, locations[3])){
+                //move to target position
+                if (Arrays.equals(target, locations[3])) {
+                    //bat
                     target = randomCoordinates();
                     if (Arrays.equals(target, locations[4])){
                         System.out.println("The bats dropped you into the bottomless pit...\nYou Lose");
@@ -80,6 +80,7 @@ public class Main {
                         System.out.println("The bats took you to a random place...");
                     }
                 } else if (Arrays.equals(target, locations[1])) {
+                    //wumpus
                     if(probability(0.7)){
                         System.out.println("You were killed by the Wumpus...\nYou Lose.");
                         gameEnd = true;
@@ -87,16 +88,22 @@ public class Main {
                         System.out.println("The Wumpus saw you and escaped to an adjacent cave...");
                         moveToAdjacentCave(locations[1], locations[0]);
                     }
-                } else if (Arrays.equals(target, locations[4])){
+                } else if (Arrays.equals(target, locations[4])) {
+                    //pit
                     System.out.println("You fell into a bottomless pit!\nYou Lose.");
                     gameEnd = true;
+                } else if (Arrays.equals(target, locations[2])) {
+                    //arrow
+                    System.out.println("Found an arrow...perhaps dropped by another, unsuccessful hunter.");
+                    arrowAmount++;
+                    locations[2] = randomCoordinates();
                 }
                 locations[0] = target;
             }
         }
     }
 
-    public static boolean adjacentToPlayer(int[] target, int[] player){
+    public static boolean isAdjacentToPlayer(int[] target, int[] player){
         return Math.abs(player[0] - target[0]) <= 1 && Math.abs(player[1] - target[1]) <= 1;
     }
 
