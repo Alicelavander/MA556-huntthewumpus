@@ -5,11 +5,10 @@ public class Main {
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
         boolean gameEnd = false;
+
         //0: player, 1: wumpus, 2: arrow, 3: bat, 4: pit
         int[][] locations = getLocations();
-
-        int arrowAmount = 5;
-        int roomNumber;
+        int arrowAmount = 2;
 
         while (!gameEnd) {
             System.out.println("Player: " + Arrays.toString(locations[0]));
@@ -18,26 +17,21 @@ public class Main {
             System.out.println("Bat: " + Arrays.toString(locations[3]));
             System.out.println("Pit: " + Arrays.toString(locations[4]));
 
-            roomNumber = 5 * locations[0][1] + locations[0][0] + 1;
+            int roomNumber = 5 * locations[0][1] + locations[0][0] + 1;
             System.out.println("You are in Room " + roomNumber);
 
-            if (isAdjacentToPlayer(locations[1], locations[0])){
-                System.out.println("I smell a Wumpus nearby.");
-            }
-            if (isAdjacentToPlayer(locations[3], locations[0])){
-                System.out.println("I hear flapping nearby.");
-            }
-            if (isAdjacentToPlayer(locations[4], locations[0])){
-                System.out.println("I feel a breeze nearby.");
-            }
+            //show hints
+            if (isAdjacentToPlayer(locations[1], locations[0])) System.out.println("I smell a Wumpus nearby.");
+            if (isAdjacentToPlayer(locations[3], locations[0])) System.out.println("I hear flapping nearby.");
+            if (isAdjacentToPlayer(locations[4], locations[0])) System.out.println("I feel a breeze nearby.");
 
+            //take user input
             System.out.print("Shoot or move (s/m)? ");
             char command = s.nextLine().toCharArray()[0];
             while (command != 's' && command != 'm') {
                 System.out.print("Shoot or move (s/m)? ");
                 command = s.nextLine().toCharArray()[0];
             }
-
             System.out.print("Choose direction (n/e/s/w): ");
             char direction = s.nextLine().toCharArray()[0];
             while (direction != 'n' && direction != 'e' && direction != 's' && direction != 'w') {
@@ -45,6 +39,7 @@ public class Main {
                 direction = s.nextLine().toCharArray()[0];
             }
 
+            //set target position
             int[] target = locations[0];
             switch (direction) {
                 case 'n' -> target[1] = (target[1] - 1 + 5) % 5;
@@ -101,12 +96,15 @@ public class Main {
                 locations[0] = target;
             }
         }
+        s.close();
     }
 
+    //TODO: fix
     public static boolean isAdjacentToPlayer(int[] target, int[] player){
         return Math.abs(player[0] - target[0]) <= 1 && Math.abs(player[1] - target[1]) <= 1;
     }
 
+    //Move to an adjacent cave, but not the same cave as the "avoid" cave.
     public static void moveToAdjacentCave(int[] object, int[] avoid) {
         boolean valid = false;
         while(!valid){
