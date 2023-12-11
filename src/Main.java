@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -7,8 +6,7 @@ public class Main {
         Scanner s = new Scanner(System.in);
         boolean gameEnd = false;
         //0: player, 1: wumpus, 2: arrow, 3: bat, 4: pit
-        int[][] locations = new int[5][2];
-        locations = getLocations(locations);
+        int[][] locations = getLocations();
 
         int arrowAmount = 5;
         int roomNumber;
@@ -60,12 +58,12 @@ public class Main {
                 else {
                     arrowAmount--;
                     System.out.println("target: " + Arrays.toString(target));
-                    System.out.println("wumpus: " + Arrays.toString(locations[1]));
+                    System.out.println("Wumpus: " + Arrays.toString(locations[1]));
                     if(Arrays.equals(target, locations[1])) {
-                        System.out.println("You killed the wumpus, you win");
+                        System.out.println("You killed the Wumpus!\n You Win.");
                         gameEnd = true;
                     } else {
-                        System.out.println("The wumpus ran away!");
+                        System.out.println("The Wumpus ran away!");
                         moveToAdjacentCave(locations[1], locations[0]);
                     }
                 }
@@ -74,18 +72,23 @@ public class Main {
                     System.out.println("Found an arrow...perhaps dropped by another, unsuccessful hunter.");
                     arrowAmount++;
                 } else if (Arrays.equals(target, locations[3])){
-                    System.out.println("The bats took you to a random place...");
                     target = randomCoordinates();
-                } else if (Arrays.equals(target, locations[1])) {
-                    if(probability(0.7)){
-                        System.out.println("You were killed by the wumpus...");
+                    if (Arrays.equals(target, locations[4])){
+                        System.out.println("The bats dropped you into the bottomless pit...\nYou Lose");
                         gameEnd = true;
                     } else {
-                        System.out.println("The wumpus saw you and escaped to an adjacent cave...");
+                        System.out.println("The bats took you to a random place...");
+                    }
+                } else if (Arrays.equals(target, locations[1])) {
+                    if(probability(0.7)){
+                        System.out.println("You were killed by the Wumpus...\nYou Lose.");
+                        gameEnd = true;
+                    } else {
+                        System.out.println("The Wumpus saw you and escaped to an adjacent cave...");
                         moveToAdjacentCave(locations[1], locations[0]);
                     }
                 } else if (Arrays.equals(target, locations[4])){
-                    System.out.println("You falled into a bottomless pit!!");
+                    System.out.println("You fell into a bottomless pit!\nYou Lose.");
                     gameEnd = true;
                 }
                 locations[0] = target;
@@ -102,7 +105,7 @@ public class Main {
         while(!valid){
             if(probability(0.5)){
                 if(probability(0.5)) object[0] = (object[0] + 1 + 5) % 5;
-                else object[0] = (object[0] - 1 + 5) % 5;;
+                else object[0] = (object[0] - 1 + 5) % 5;
             } else {
                 if(probability(0.5)) object[1] = (object[1] + 1 + 5) % 5;
                 else object[1] = (object[1] - 1 + 5) % 5;
@@ -121,7 +124,8 @@ public class Main {
         return new int[] { x, y };
     }
 
-    public static int[][] getLocations(int[][] locations) {
+    public static int[][] getLocations() {
+        int[][] locations = new int[5][2];
         for (int i = 0; i < locations.length; i++) { // sets locations of each object in the game
             locations[i] = randomCoordinates();
             int newXCoords = locations[i][0];
