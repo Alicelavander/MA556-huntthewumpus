@@ -99,9 +99,11 @@ public class Main {
         s.close();
     }
 
-    //TODO: fix
-    public static boolean isAdjacentToPlayer(int[] target, int[] player){
-        return Math.abs(player[0] - target[0]) <= 1 && Math.abs(player[1] - target[1]) <= 1;
+    //check if target is adjacent to the player
+    public static boolean isAdjacentToPlayer(int[] target, int[] player) {
+        int horizd = Math.abs(player[0] - target[0]);
+        int vertd = Math.abs(player[1] - target[1]);
+        return (horizd <= 1 || horizd >= 4) && (vertd <= 1 || vertd >= 4);
     }
 
     //Move to an adjacent cave, but not the same cave as the "avoid" cave.
