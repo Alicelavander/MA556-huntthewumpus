@@ -2,13 +2,17 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
+    //0: player, 1: wumpus, 2: arrow, 3: bat, 4: pit
+    static int[][] locations;
+    static int arrowAmount = 2;
+
     public static void main(String[] args) {
+        new WumpusGraphics();
+
         Scanner s = new Scanner(System.in);
         boolean gameEnd = false;
 
-        //0: player, 1: wumpus, 2: arrow, 3: bat, 4: pit
-        int[][] locations = getLocations();
-        int arrowAmount = 2;
+        locations = initLocations();
 
         while (!gameEnd) {
             System.out.println("Player: " + Arrays.toString(locations[0]));
@@ -99,15 +103,17 @@ public class Main {
         s.close();
     }
 
+    public static int[] getLocation(int index) {return locations[index];}
+
     //check if target is adjacent to the player
-    public static boolean isAdjacentToPlayer(int[] target, int[] player) {
+    static boolean isAdjacentToPlayer(int[] target, int[] player) {
         int horizd = Math.abs(player[0] - target[0]);
         int vertd = Math.abs(player[1] - target[1]);
         return (horizd <= 1 || horizd >= 4) && (vertd <= 1 || vertd >= 4);
     }
 
     //Move to an adjacent cave, but not the same cave as the "avoid" cave.
-    public static void moveToAdjacentCave(int[] object, int[] avoid) {
+    static void moveToAdjacentCave(int[] object, int[] avoid) {
         boolean valid = false;
         while(!valid){
             if(probability(0.5)){
@@ -121,17 +127,20 @@ public class Main {
         }
     }
 
-    public static boolean probability(double threshold){
+    //a quick dice roll
+    static boolean probability(double threshold){
         return Math.random() < threshold;
     }
 
-    public static int[] randomCoordinates() {
+    //get random coordinates for the object within the 5x5 grid
+    static int[] randomCoordinates() {
         int x = (int) (Math.random() * 5);
         int y = (int) (Math.random() * 5);
         return new int[] { x, y };
     }
 
-    public static int[][] getLocations() {
+    //get initial locations for all objects
+    static int[][] initLocations() {
         int[][] locations = new int[5][2];
         for (int i = 0; i < locations.length; i++) { // sets locations of each object in the game
             locations[i] = randomCoordinates();

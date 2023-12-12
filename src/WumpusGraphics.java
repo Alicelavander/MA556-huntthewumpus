@@ -1,18 +1,16 @@
-package src;
-
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 
+import static java.lang.Thread.sleep;
+
 public class WumpusGraphics extends Frame {
     public int mapDimensions = 5;
-    public int xLocation = 2;
-    public int yLocation = 2;
-    public int xPos;
-    public int yPos;
-    public char userMoveTemp;
-    public int direction;
+    public int[] playerPosition;
+
     public Color warmYellow = new Color(143, 82, 1);
     public Color darkGrey = new Color(20, 20, 20);
+
+    char userInput;
 
     public WumpusGraphics() {
         setSize(751, 500);
@@ -40,29 +38,21 @@ public class WumpusGraphics extends Frame {
         drawBorder(g);
     }
 
-    public void movementMechanism(Graphics g) {
+    public void userInput() {
         addKeyListener(new KeyAdapter() { // have to use Adapter, Listener does not work
             public void keyPressed(java.awt.event.KeyEvent e) {
-                userMoveTemp = e.getKeyChar();
+                userInput = e.getKeyChar();
             }
         });
-        yPos = yLocation * 100 + 25;
-        xPos = xLocation * 100 + 25;
-        if (userMoveTemp == 'w') {
-            yLocation -= 1;
-        } else if (userMoveTemp == 's') {
-            yLocation += 1;
-        } else if (userMoveTemp == 'a') {
-            xLocation -= 1;
-        } else if (userMoveTemp == 'd') {
-            xLocation += 1;
+
+        switch (userInput) {
+            case 'w' -> playerPosition[1] = (playerPosition[1] - 1 + 5) % 5;
+            case 'd' -> playerPosition[0] = (playerPosition[0] + 1 + 5) % 5;
+            case 's' -> playerPosition[1] = (playerPosition[1] + 1 + 5) % 5;
+            case 'a' -> playerPosition[0] = (playerPosition[0] - 1 + 5) % 5;
         }
-        Color myBlue = new Color(100, 100, 100);
-        g.setColor(myBlue);
-        g.fillRoundRect(xPos, yPos, 50, 50, 50, 50);
-        drawGlowMechanism(g);
-        repaint();
-        userMoveTemp = 'x';
+
+        userInput = 'x';
     }
 
     public void drawPit(Graphics g) {
@@ -85,25 +75,30 @@ public class WumpusGraphics extends Frame {
         g.fillRoundRect(510 + 50 + 25 + 50 + 25, 50, 50, 50, 50, 50);
     }
 
-    public void drawGlowMechanism(Graphics g) {
+    public void drawPlayer(Graphics g) {
+        g.setColor(new Color(100, 100, 100));
+        g.fillRoundRect(playerPosition[0] * 100 + 25, playerPosition[1] * 100 + 25, 50, 50, 50, 50);
+
         g.setColor(warmYellow);
-        g.drawLine(xLocation * 100, yLocation * 100 - 50, xLocation * 100, yLocation * 100 + 150);
-        g.drawLine(xLocation * 100 + 100, yLocation * 100 - 50, xLocation * 100 + 100, yLocation * 100 + 150);
-        g.drawLine(xLocation * 100 - 50, yLocation * 100, xLocation * 100 + 150, yLocation * 100);
-        g.drawLine(xLocation * 100 - 50, yLocation * 100 + 100, xLocation * 100 + 150, yLocation * 100 + 100);
+        g.drawLine(playerPosition[0] * 100, playerPosition[1] * 100 - 50, playerPosition[0] * 100, playerPosition[1] * 100 + 150);
+        g.drawLine(playerPosition[0] * 100 + 100, playerPosition[1] * 100 - 50, playerPosition[0] * 100 + 100, playerPosition[1] * 100 + 150);
+        g.drawLine(playerPosition[0] * 100 - 50, playerPosition[1] * 100, playerPosition[0] * 100 + 150, playerPosition[1] * 100);
+        g.drawLine(playerPosition[0] * 100 - 50, playerPosition[1] * 100 + 100, playerPosition[0] * 100 + 150, playerPosition[1] * 100 + 100);
     }
 
     public void paint(Graphics g) {
+        playerPosition = Main.getLocation(0);
+
         drawCaves(g);
         drawBorder(g);
         drawPit(g);
         drawBat(g);
         drawWumpus(g);
-        movementMechanism(g);
-    }
+        drawPlayer(g);
 
-    public static void main(String[] args) {
-        new WumpusGraphics();
+        userInput();
+
+        repaint();
     }
 }
 
