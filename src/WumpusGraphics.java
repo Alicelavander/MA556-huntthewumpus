@@ -1,8 +1,6 @@
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 
-import static java.lang.Thread.sleep;
-
 public class WumpusGraphics extends Frame {
     public int mapDimensions = 5;
     public int[] playerPosition;
@@ -89,6 +87,11 @@ public class WumpusGraphics extends Frame {
     public void paint(Graphics g) {
         playerPosition = Main.getLocation(0);
 
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         drawCaves(g);
         drawBorder(g);
         drawPit(g);
