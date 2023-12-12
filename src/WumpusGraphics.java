@@ -1,5 +1,3 @@
-package src;
-
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 
@@ -94,6 +92,11 @@ public class WumpusGraphics extends Frame {
     }
 
     public void paint(Graphics g) {
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         drawCaves(g);
         drawBorder(g);
         drawPit(g);
