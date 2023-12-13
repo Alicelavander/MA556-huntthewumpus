@@ -2,7 +2,6 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 
 public class WumpusGraphics extends Frame {
-    public int mapDimensions = 5;
     public int[] playerPosition;
 
     public Color warmYellow = new Color(143, 82, 1);
@@ -17,7 +16,7 @@ public class WumpusGraphics extends Frame {
     }
 
     public void drawCaves(Graphics g) {
-        for (int i = 0; i <= mapDimensions; i++) { // draw horizontal lines
+        for (int i = 0; i <= 5; i++) { // draw horizontal lines
             g.setColor(darkGrey);
             g.drawLine(0, i * 100, 500, i * 100);
             g.drawLine(i * 100, 0, i * 100, 500);
@@ -38,20 +37,27 @@ public class WumpusGraphics extends Frame {
 
     public void userInput(Graphics g) {
         addKeyListener(new KeyAdapter() { // have to use Adapter, Listener does not work
+
+            //when key pressed
             public void keyPressed(java.awt.event.KeyEvent e) {
                 userInput = e.getKeyChar();
+
+                switch (Main.getInputState()){
+                    case 1:
+                        if(userInput == ' ') Main.setInputState(2, userInput);
+                        else Main.setInputState(0, userInput);
+                        break;
+                    case 2:
+                        switch (userInput) {
+                            case 'w' -> shootArrow(g); //up
+                            case 'd' -> shootArrow(g); //right
+                            case 's' -> shootArrow(g); //down
+                            case 'a' -> shootArrow(g); //left
+                        }
+                        Main.setInputState(0, userInput);
+                }
             }
         });
-
-        switch (userInput) {
-            case 'w' -> playerPosition[1] = (playerPosition[1] - 1 + 5) % 5;
-            case 'd' -> playerPosition[0] = (playerPosition[0] + 1 + 5) % 5;
-            case 's' -> playerPosition[1] = (playerPosition[1] + 1 + 5) % 5;
-            case 'a' -> playerPosition[0] = (playerPosition[0] - 1 + 5) % 5;
-            case ' ' -> shootArrow(g);
-        }
-
-        userInput = 'x';
     }
 
     public void drawPit(Graphics g) {
@@ -75,20 +81,22 @@ public class WumpusGraphics extends Frame {
     }
 
     public void shootArrow(Graphics g) {
-        for (int i = 0; i < 75; i++) {
-            try {
-                Thread.sleep(15);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+        if(Main.getArrowAmount() > 0) {
+            for (int i = 0; i < 75; i++) {
+                try {
+                    Thread.sleep(15);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                g.setColor(Color.black);
+                g.fillRect(0, 0, 500, 500);
+                drawCaves(g);
+                drawPlayer(g);
+                drawInfoBox(g);
+                int arrowLocationX = playerPosition[0] * 100 + 25;
+                int arrowLocationY = playerPosition[1] * 100 + 25 - 2 * i;
+                paintArrow(g, arrowLocationX, arrowLocationY);
             }
-            g.setColor(Color.black);
-            g.fillRect(0, 0, 500, 500);
-            drawCaves(g);
-            drawPlayer(g);
-            drawInfoBox(g);
-            int arrowLocationX = playerPosition[0] * 100 + 25;
-            int arrowLocationY = playerPosition[1] * 100 + 25 - 2 * i;
-            paintArrow(g, arrowLocationX, arrowLocationY);
         }
     }
 
@@ -127,9 +135,11 @@ public class WumpusGraphics extends Frame {
         }
         drawCaves(g);
         drawBorder(g);
-        drawPit(g);
-        drawBat(g);
-        drawWumpus(g);
+
+        if (Main.isAdjacentToPlayer(Main.getLocation(1), Main.getLocation(0))) drawWumpus(g);
+        if (Main.isAdjacentToPlayer(Main.getLocation(3), Main.getLocation(0))) drawBat(g);
+        if (Main.isAdjacentToPlayer(Main.getLocation(4), Main.getLocation(0))) drawPit(g);
+
         drawPlayer(g);
 
         userInput(g);

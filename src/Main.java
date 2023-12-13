@@ -2,17 +2,20 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
+    private static int arrowAmount = 2;
+
     //0: player, 1: wumpus, 2: arrow, 3: bat, 4: pit
-    static int[][] locations;
-    static int arrowAmount = 2;
+    private static int[][] locations;
+
+    //0: wait, 1: space(shoot) or wasd(move), 2: wasd(shoot)
+    private static int inputState;
+
+    static boolean gameEnd = false;
 
     public static void main(String[] args) {
-        new WumpusGraphics();
-
-        Scanner s = new Scanner(System.in);
-        boolean gameEnd = false;
-
         locations = initLocations();
+
+        new WumpusGraphics();
 
         while (!gameEnd) {
             System.out.println("Player: " + Arrays.toString(locations[0]));
@@ -20,54 +23,27 @@ public class Main {
             System.out.println("Arrow: " + Arrays.toString(locations[2]));
             System.out.println("Bat: " + Arrays.toString(locations[3]));
             System.out.println("Pit: " + Arrays.toString(locations[4]));
+        }
+    }
 
-            int roomNumber = 5 * locations[0][1] + locations[0][0] + 1;
-            System.out.println("You are in Room " + roomNumber);
+    public static int[] getLocation(int index) {return locations[index];}
+    public static int getArrowAmount() {return arrowAmount;}
+    public static int getInputState() {return inputState;}
 
-            //show hints
-            if (isAdjacentToPlayer(locations[1], locations[0])) System.out.println("I smell a Wumpus nearby.");
-            if (isAdjacentToPlayer(locations[3], locations[0])) System.out.println("I hear flapping nearby.");
-            if (isAdjacentToPlayer(locations[4], locations[0])) System.out.println("I feel a breeze nearby.");
-
-            //take user input
-            System.out.print("Shoot or move (s/m)? ");
-            char command = s.nextLine().toCharArray()[0];
-            while (command != 's' && command != 'm') {
-                System.out.print("Shoot or move (s/m)? ");
-                command = s.nextLine().toCharArray()[0];
-            }
-            System.out.print("Choose direction (n/e/s/w): ");
-            char direction = s.nextLine().toCharArray()[0];
-            while (direction != 'n' && direction != 'e' && direction != 's' && direction != 'w') {
-                System.out.print("Choose direction (n/e/s/w): ");
-                direction = s.nextLine().toCharArray()[0];
-            }
-
-            //set target position
+    //core logic of the game. Checks for target location & appropriate operation
+    public static void setInputState(int state, char input) {
+        if(state != 0) inputState = state;
+        else {
+            //set target location
             int[] target = locations[0];
-            switch (direction) {
-                case 'n' -> target[1] = (target[1] - 1 + 5) % 5;
-                case 'e' -> target[0] = (target[0] + 1 + 5) % 5;
+            switch (input) {
+                case 'w' -> target[1] = (target[1] - 1 + 5) % 5;
+                case 'd' -> target[0] = (target[0] + 1 + 5) % 5;
                 case 's' -> target[1] = (target[1] + 1 + 5) % 5;
-                case 'w' -> target[0] = (target[0] - 1 + 5) % 5;
+                case 'a' -> target[0] = (target[0] - 1 + 5) % 5;
             }
 
-            if (command == 's') {
-                //shoot an arrow to target position
-                if(arrowAmount == 0) System.out.println("You ran out of arrows :(");
-                else {
-                    arrowAmount--;
-                    System.out.println("target: " + Arrays.toString(target));
-                    System.out.println("Wumpus: " + Arrays.toString(locations[1]));
-                    if(Arrays.equals(target, locations[1])) {
-                        System.out.println("You killed the Wumpus!\n You Win.");
-                        gameEnd = true;
-                    } else {
-                        System.out.println("The Wumpus ran away!");
-                        moveToAdjacentCave(locations[1], locations[0]);
-                    }
-                }
-            } else {
+            if(inputState == 1){
                 //move to target position
                 if (Arrays.equals(target, locations[3])) {
                     //bat
@@ -98,15 +74,27 @@ public class Main {
                     locations[2] = randomCoordinates();
                 }
                 locations[0] = target;
+            } else {
+                //shoot an arrow to target position
+                if(arrowAmount == 0) System.out.println("No arrows :(");
+                else {
+                    arrowAmount--;
+                    System.out.println("target: " + Arrays.toString(target));
+                    System.out.println("Wumpus: " + Arrays.toString(locations[1]));
+                    if(Arrays.equals(target, locations[1])) {
+                        System.out.println("You killed the Wumpus!\n You Win.");
+                        gameEnd = true;
+                    } else {
+                        System.out.println("The Wumpus ran away!");
+                        moveToAdjacentCave(locations[1], locations[0]);
+                    }
+                }
             }
         }
-        s.close();
     }
 
-    public static int[] getLocation(int index) {return locations[index];}
-
     //check if target is adjacent to the player
-    static boolean isAdjacentToPlayer(int[] target, int[] player) {
+    public static boolean isAdjacentToPlayer(int[] target, int[] player) {
         int horizd = Math.abs(player[0] - target[0]);
         int vertd = Math.abs(player[1] - target[1]);
         return (horizd <= 1 || horizd >= 4) && (vertd <= 1 || vertd >= 4);
