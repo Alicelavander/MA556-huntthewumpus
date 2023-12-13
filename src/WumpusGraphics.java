@@ -4,7 +4,7 @@ import java.awt.event.KeyAdapter;
 public class WumpusGraphics extends Frame {
     public int mapDimensions = 5;
     public int[] playerPosition;
-
+    public char direction;
     public Color warmYellow = new Color(143, 82, 1);
     public Color darkGrey = new Color(20, 20, 20);
 
@@ -50,7 +50,7 @@ public class WumpusGraphics extends Frame {
             case 'a' -> playerPosition[0] = (playerPosition[0] - 1 + 5) % 5;
             case ' ' -> shootArrow(g);
         }
-
+        direction = userInput;
         userInput = 'x';
     }
 
@@ -88,17 +88,20 @@ public class WumpusGraphics extends Frame {
             drawInfoBox(g);
             int arrowLocationX = playerPosition[0] * 100 + 25;
             int arrowLocationY = playerPosition[1] * 100 + 25 - 2 * i;
-            paintArrow(g, arrowLocationX, arrowLocationY);
+            paintArrow(g, arrowLocationX, arrowLocationY, direction);
         }
     }
 
-    public void paintArrow(Graphics g, int arrowLocationX, int arrowLocationY) {
+    public void paintArrow(Graphics g, int arrowLocationX, int arrowLocationY, char direction) {
+        System.out.println("direction" + direction);
         g.setColor(new Color(245, 24, 24));
         g.fillRoundRect(arrowLocationX, arrowLocationY, 12, 12, 15, 15);
-        g.setColor(new Color(245, 54, 24));
-        g.fillRoundRect(arrowLocationX, arrowLocationY + 8, 12, 12, 15, 15);
-        g.setColor(new Color(245, 74, 24));
-        g.fillRoundRect(arrowLocationX, arrowLocationY + 16, 12, 12, 15, 15);
+
+        g.fillRoundRect(arrowLocationX + 40, arrowLocationY, 12, 12, 15, 15);
+
+        g.fillRoundRect(arrowLocationX, arrowLocationY + 40, 12, 12, 15, 15);
+
+        g.fillRoundRect(arrowLocationX + 40, arrowLocationY + 40, 12, 12, 15, 15);
     }
 
     public void drawPlayer(Graphics g) {
@@ -114,7 +117,8 @@ public class WumpusGraphics extends Frame {
                 playerPosition[1] * 100);
         g.drawLine(playerPosition[0] * 100 - 50, playerPosition[1] * 100 + 100, playerPosition[0] * 100 + 150,
                 playerPosition[1] * 100 + 100);
-        paintArrow(g, playerPosition[0] * 100 + 25, playerPosition[1] * 100 + 25);
+        paintArrow(g, playerPosition[0] * 100 + 25, playerPosition[1] * 100 + 25, direction);
+
     }
 
     public void paint(Graphics g) {
