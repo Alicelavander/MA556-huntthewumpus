@@ -103,6 +103,16 @@ public class WumpusGraphics extends Frame {
     public void drawPlayer(Graphics g) {
         g.setColor(new Color(100, 100, 100));
         g.fillRoundRect(playerPosition[0] * 100 + 25, playerPosition[1] * 100 + 25, 50, 50, 50, 50);
+
+        g.setColor(warmYellow);
+        g.drawLine(playerPosition[0] * 100, playerPosition[1] * 100 - 50, playerPosition[0] * 100,
+                playerPosition[1] * 100 + 150);
+        g.drawLine(playerPosition[0] * 100 + 100, playerPosition[1] * 100 - 50, playerPosition[0] * 100 + 100,
+                playerPosition[1] * 100 + 150);
+        g.drawLine(playerPosition[0] * 100 - 50, playerPosition[1] * 100, playerPosition[0] * 100 + 150,
+                playerPosition[1] * 100);
+        g.drawLine(playerPosition[0] * 100 - 50, playerPosition[1] * 100 + 100, playerPosition[0] * 100 + 150,
+                playerPosition[1] * 100 + 100);
     }
 
     public void paint(Graphics g) {
