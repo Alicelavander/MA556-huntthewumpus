@@ -26,7 +26,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        locations = initLocations();
+        locations = initLocations(); // generate random locations for each thing in the game
         System.out.println("start location: " + Arrays.toString(locations[0]));
         new WumpusGraphics();
     }
@@ -76,18 +76,18 @@ public class Main {
                 locations[2] = randomCoordinates();
             }
             locations[0] = target;
-        } else if (input == 'i' || input == 'j' || input == 'k' || input == 'l') {
-            switch (input) {
+        } else if (input == 'i' || input == 'j' || input == 'k' || input == 'l') { // handles logic of the arrow
+            switch (input) { // gets the end destination of the arrow when fired.
                 // for arrows
                 case 'i' -> arrowTarget[1] = (arrowTarget[1] - 1 + 5) % 5;
                 case 'l' -> arrowTarget[0] = (arrowTarget[0] + 1 + 5) % 5;
                 case 'k' -> arrowTarget[1] = (arrowTarget[1] + 1 + 5) % 5;
                 case 'j' -> arrowTarget[0] = (arrowTarget[0] - 1 + 5) % 5;
             }
-            // shoot an arrow to target position
             if (arrowAmount == 0)
                 System.out.println("No arrows :(");
             else {
+                // what happens when you fire an arrow
                 arrowAmount--;
                 System.out.println("target: " + Arrays.toString(arrowTarget));
                 System.out.println("Wumpus: " + Arrays.toString(locations[1]));
@@ -163,9 +163,7 @@ public class Main {
     }
 }
 
-// so, as of right now, there are 2 states for the user to be in.
-// they are in either 0 or 2,
-// in 0, they can move and shoot, and the base code for the game runs, checking
-// the wumpus locations etc
-// to shoot, they are in 2
-// where they then click wasd to shoot.
+// Work Division
+// Arisa and Shaan did most of this stuff
+// Zk did most of the graphic stuff.
+// integrating logic with ui was a group effort.
