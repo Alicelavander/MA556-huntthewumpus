@@ -152,7 +152,6 @@ public class WumpusGraphics extends Frame { // graphics componenet
             }
         } else { // text display after winning or losing
             winLose = Main.getWinLose();
-            System.out.println("enter a pit");
             if (winLose == false) { // if lost
                 // Code To popup an WARNING_MESSAGE Dialog.
                 JOptionPane.showMessageDialog(this, "You Shud Get Better at the Game, You Lost",
